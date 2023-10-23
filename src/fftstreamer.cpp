@@ -1,3 +1,8 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2022 sdelang
+
+#pragma once
+
 #include <spiralviz/fftstreamer.hpp>
 
 FFTStreamer::FFTStreamer(FFTHighLevelConfig config, std::size_t sample_rate) :

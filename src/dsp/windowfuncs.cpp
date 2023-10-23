@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2022 sdelang
 
-#pragma once
-
 #include <spiralviz/dsp/windowfuncs.hpp>
 
 #include <cmath>

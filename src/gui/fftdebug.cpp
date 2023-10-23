@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2022 sdelang
 
-#pragma once
-
+#include "imgui.h"
 #include <spiralviz/gui/fftdebug.hpp>
 
 #include <spiralviz/dsp/windowedfft.hpp>
@@ -42,7 +41,20 @@ void FFTDebugGUI::show_params()
     ImGui::SameLine();
     ImGui::Text("Window type\n");
 
-    ImGui::SliderFloat("Symmetry skew factor", &new_cfg.symmetry_skew_factor, 0.1, 32.0);
+    ImGui::SliderFloat("Symmetry skew", &new_cfg.symmetry_skew_factor, 0.1, 32.0);
+
+    if (ImGui::IsItemHovered())
+    {
+        ImGui::SetTooltip(
+            "When not equal to 1, \"squishes\" around the window function in an"
+            " asymmetric way.\n"
+            "\n"
+            "The higher the value, the further the window function gets"
+            " \"squished\" to the right.\n"
+            "This reduces latency and means notes linger for less long.\n"
+            "However, it might worsen flickering and blurs out the plot."
+        );
+    }
 
     if (new_cfg != m_config)
     {

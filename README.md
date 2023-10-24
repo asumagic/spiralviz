@@ -20,9 +20,11 @@ Ensure that you have fftw3 installed on your system. [SFML, dear imgui and ImGui
 ```shell
 mkdir build/
 cd build /
-cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ..
+cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -D CMAKE_C_COMPILER=clang -D CMAKE_CXX_COMPILER=clang++ ..
 cmake --build .
 ```
+
+The above compile step specifies using the clang compiler, but you may omit it if you want to build with gcc.
 
 ### Running
 

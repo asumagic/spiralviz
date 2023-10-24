@@ -3,9 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 project(spiralviz LANGUAGES CXX)
 
 # https://github.com/eliasdaler/imgui-sfml-fetchcontent/tree/master
-# TODO: doesn't fucking work
-set(USE_SYSTEM_DEPS ON CACHE BOOL "Use system SFML by default")
-set(SFML_BUILD_AUDIO ON CACHE BOOL "Compile SFML with audio support if we must")
+set(SFML_BUILD_AUDIO ON CACHE BOOL "Compile SFML with audio support" FORCE)
 add_subdirectory(deps/imgui-sfml)
 
 find_package(PkgConfig REQUIRED)
@@ -21,6 +19,7 @@ add_executable(
     src/audio/recorder.cpp
     src/gui/fftdebug.cpp
     src/gui/vizshader.cpp
+    src/gui/noterender.cpp
     src/dsp/windowedfft.cpp
     src/dsp/windowfuncs.cpp
 )
@@ -59,15 +58,15 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     )
 endif()
 
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    target_compile_definitions(
-        spiralviz
-        PUBLIC
-        "_GLIBCXX_DEBUG"
-    )
+# if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+#     target_compile_definitions(
+#         spiralviz
+#         PUBLIC
+#         "_GLIBCXX_DEBUG"
+#     )
 
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address,undefined")
-endif()
+#     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address,undefined")
+# endif()
 
 target_link_libraries(
     spiralviz
@@ -75,7 +74,7 @@ target_link_libraries(
     # fmt
     # spdlog
     ImGui-SFML::ImGui-SFML
-    sfml-audio # TODO: remove this?
+    sfml-audio
     PkgConfig::FFTWF
 )
 

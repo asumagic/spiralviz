@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2022 sdelang
 
+#include "SFML/Window/ContextSettings.hpp"
 #include <spiralviz/app.hpp>
 
 #include <spiralviz/audio/recorder.hpp>
@@ -20,9 +21,13 @@ App::App() :
     m_window{
         sf::VideoMode{1280, 720},
         "spiralviz",
-        sf::Style::Default
+        sf::Style::Default,
+        sf::ContextSettings{0, 0, 8} // 8x MSAA
     },
     m_viz{viz_paths_defaults},
+    m_note_render{
+        &m_viz.params()
+    },
     m_fft_gui{
         &m_hl_config,
         &m_streamer.fft(),
@@ -59,6 +64,7 @@ void App::show_until_closed()
         // render
         // m_window.clear(); // not necessary with a fullscreen shader
         m_viz.render_into(m_window);
+        m_note_render.render_into(m_window);
 
         ImGui::SFML::Render(m_window);
 
@@ -88,6 +94,14 @@ void App::handle_event(const sf::Event& ev)
                 }
                 catch(...) {}
             }
+
+            break;
+        }
+
+        case sf::Event::Resized:
+        {
+            m_window.setView(sf::View{{0.0f, 0.0f, float(ev.size.width), float(ev.size.height)}});
+            break;
         }
 
         default: break;

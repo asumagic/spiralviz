@@ -8,6 +8,7 @@
 
 #include <spiralviz/gui/vizshader.hpp>
 #include <spiralviz/gui/fftdebug.hpp>
+#include <spiralviz/gui/noterender.hpp>
 #include <spiralviz/fftstreamer.hpp>
 
 #include <optional>
@@ -32,6 +33,8 @@ class App
     FFTHighLevelConfig m_hl_config = default_hl_config;
 
     VizShader m_viz;
+
+    NoteRender m_note_render;
 
     // Debug GUIs at the end since they refer to our fields
     FFTDebugGUI m_fft_gui;

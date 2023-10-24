@@ -1,7 +1,7 @@
 # spiralviz
 ## Real-time spiral spectrogram using FFTW
 
-<p style="text-align: center;">
+<p align="center">
     <img src="assets/oneshot-360p.png"/><br/>
     Example spiral spectrogram playing <a href="https://nightmargin.bandcamp.com/track/ghost-in-the-machine">some music</a>
 </p>

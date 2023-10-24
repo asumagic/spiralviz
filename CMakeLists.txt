@@ -56,6 +56,12 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
         "-flto=thin"
         "-Wl,--thinlto-cache-dir=${PROJECT_BINARY_DIR}/lto.cache"
     )
+
+    target_link_options(
+        spiralviz
+        PUBLIC
+        "-fuse-ld=lld"
+    )
 endif()
 
 # if (CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -71,23 +77,15 @@ endif()
 target_link_libraries(
     spiralviz
     PUBLIC
-    # fmt
-    # spdlog
     ImGui-SFML::ImGui-SFML
-    sfml-audio
+    sfml-audio # provided by ImGui-SFML
     PkgConfig::FFTWF
 )
 
 target_include_directories(
     spiralviz
     PUBLIC
-    include
-)
-
-target_link_options(
-    spiralviz
-    PUBLIC
-    "-fuse-ld=mold"
+    include/
 )
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

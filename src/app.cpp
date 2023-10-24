@@ -57,11 +57,15 @@ void App::show_until_closed()
         ImGui::SFML::Update(m_window, dt);
         update_fft(dt);
 
-        // ImGui::ShowDemoWindow();
-        m_fft_gui.show_params_gui();
+        {
+            // imgui stuff -- note that this actually gets pushed on the screen
+            // when ImGui::SFML::Render is called, so it's ok to do this here.
+            // ImGui::ShowDemoWindow();
+            m_fft_gui.show_params_gui();
+            m_note_render.show_controls_gui();
+        }
 
-
-        // render
+        // Rendering
         // m_window.clear(); // not necessary with a fullscreen shader
         m_viz.render_into(m_window);
         m_note_render.render_into(m_window);
@@ -118,6 +122,8 @@ void App::update_fft(sf::Time dt)
 
     if (!fft_data.empty())
     {
+        // TODO: it's kinda ugly that we only show the window here, we probably
+        // should just store the FFT data somewhere...
         m_fft_gui.show_fft_gui(fft_data);
         m_viz.update_fft_texture(fft_data, m_streamer.recorder().getSampleRate());
     }

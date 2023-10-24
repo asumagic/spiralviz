@@ -34,6 +34,11 @@ NoteRender::NoteRender(const VizParams* params) :
 
 void NoteRender::render_into(sf::RenderTarget& target, sf::FloatRect target_rect)
 {
+    if (!m_shown)
+    {
+        return;
+    }
+
     sf::Vector2f origin{
         target_rect.left + (target_rect.width * 0.5f),
         target_rect.top + (target_rect.height * 0.5f)
@@ -50,19 +55,26 @@ void NoteRender::render_into(sf::RenderTarget& target, sf::FloatRect target_rect
     {
         const float angle = (float(i) / 12.0f) * (std::numbers::pi * 2.0);
 
-        target.draw(
-            ThickLine{origin, angle, line_length}
-                .with_thickness(sharp_table[i] ? 3.0f : 8.0f)
-                .with_color(start_color, sf::Color::Transparent),
-            lineState
-        );
+        if (m_show_lines)
+        {
+            target.draw(
+                ThickLine{origin, angle, line_length}
+                    .with_thickness(/*sharp_table[i] ? 3.0f : 8.0f*/ 8.0f)
+                    .with_color(start_color, sf::Color::Transparent),
+                lineState
+            );
+        }
 
-        const sf::Vector2f angle_vec{std::cos(angle), std::sin(angle)};
-        const auto text_pos = origin + angle_vec * note_dist;
-        m_text.setString(note_names_doremi[i]);
-        m_text.setPosition(text_pos);
-        m_text.setOrigin(m_text.getGlobalBounds().width * 0.5f, m_text.getGlobalBounds().height * 0.5f);
-        target.draw(m_text);
+        if (m_show_notes)
+        {
+            const sf::Vector2f angle_vec{std::cos(angle), std::sin(angle)};
+            const auto text_pos = origin + angle_vec * note_dist;
+            const auto note_name = m_use_doremi ? note_names_doremi[i] : note_names_cde[i]; 
+            m_text.setString(note_name);
+            m_text.setPosition(text_pos);
+            m_text.setOrigin(m_text.getGlobalBounds().width * 0.5f, m_text.getGlobalBounds().height * 0.5f);
+            target.draw(m_text);
+        }
     }
 }
 
@@ -74,4 +86,20 @@ void NoteRender::render_into(sf::RenderTarget& target)
         {float(target_size.x), float(target_size.y)}
     };
     render_into(target, target_rect);
+}
+
+void NoteRender::show_controls_gui()
+{
+    ImGui::Begin("12-TET overlay");
+
+    ImGui::Checkbox("Enable overlay", &m_shown);
+
+    if (m_shown)
+    {
+        ImGui::Checkbox("Show note names", &m_show_notes);
+        ImGui::Checkbox("Show note lines", &m_show_lines);
+        ImGui::Checkbox("Use do-re-mi instead of C-D-E", &m_use_doremi);
+    }
+
+    ImGui::End();
 }

@@ -58,7 +58,7 @@ void App::show_until_closed()
         update_fft(dt);
 
         // ImGui::ShowDemoWindow();
-        m_fft_gui.show_params();
+        m_fft_gui.show_params_gui();
 
 
         // render
@@ -118,7 +118,7 @@ void App::update_fft(sf::Time dt)
 
     if (!fft_data.empty())
     {
-        m_fft_gui.show_fft(fft_data);
+        m_fft_gui.show_fft_gui(fft_data);
         m_viz.update_fft_texture(fft_data, m_streamer.recorder().getSampleRate());
     }
 }

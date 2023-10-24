@@ -6,7 +6,7 @@
 
 #include <spiralviz/dsp/windowedfft.hpp>
 
-void FFTDebugGUI::show_params()
+void FFTDebugGUI::show_params_gui()
 {
     ImGui::Begin("FFT parameters");
 
@@ -70,7 +70,7 @@ void FFTDebugGUI::show_params()
     ImGui::End();
 }
 
-void FFTDebugGUI::show_fft(std::span<const float> fft_data)
+void FFTDebugGUI::show_fft_gui(std::span<const float> fft_data)
 {
     ImGui::Begin("FFT");
 

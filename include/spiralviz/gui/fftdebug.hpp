@@ -15,8 +15,8 @@ class FFTDebugGUI
         m_config{*config}, m_fft{*fft}, m_recorder{*recorder}
     {}
 
-    void show_params();
-    void show_fft(std::span<const float> fft_data);
+    void show_params_gui();
+    void show_fft_gui(std::span<const float> fft_data);
 
     private:
     FFTHighLevelConfig& m_config;

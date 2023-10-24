@@ -25,6 +25,8 @@ class App
 
     void update_fft(sf::Time dt);
 
+    void show_main_bar_gui();
+
     double m_samples_dt = 0.0;
 
     sf::RenderWindow m_window;

@@ -55,6 +55,9 @@ void App::show_until_closed()
         const sf::Time dt = delta_clock.restart();
 
         ImGui::SFML::Update(m_window, dt);
+
+        show_main_bar_gui();
+
         update_fft(dt);
 
         {
@@ -127,4 +130,41 @@ void App::update_fft(sf::Time dt)
         m_fft_gui.show_fft_gui(fft_data);
         m_viz.update_fft_texture(fft_data, m_streamer.recorder().getSampleRate());
     }
+}
+
+void App::show_main_bar_gui()
+{
+    ImGui::PushStyleColor(ImGuiCol_MenuBarBg, ImVec4(0.0, 0.0, 0.0, 0.0));
+    ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.0, 0.0, 0.0, 0.0));
+    ImGui::BeginMainMenuBar();
+    ImGui::PopStyleColor();
+    ImGui::PopStyleColor();
+
+    ImGui::TextColored(ImVec4(1.0, 1.0, 1.0, 0.5), "Spiralviz");
+    ImGui::Spacing();
+
+    const ImVec4 heading_color(1.0, 1.0, 1.0, 0.8);
+
+    const auto menu_bool = [](const char* name, bool* setting) {
+        if (ImGui::MenuItem(name, nullptr, *setting))
+        {
+            *setting = !*setting;
+        }
+    };
+
+    if (ImGui::BeginMenu("View"))
+    {
+        ImGui::TextColored(heading_color, "- FFT");
+        menu_bool("FFT parameters", &m_fft_gui.params().enable_params_gui);
+        menu_bool("Raw FFT view", &m_fft_gui.params().enable_fft_gui);
+
+        ImGui::Spacing();
+
+        ImGui::TextColored(heading_color, "- Note display");
+        menu_bool("Overlay settings", &m_note_render.params().enable_controls_gui);
+
+        ImGui::EndMenu();
+    }
+
+    ImGui::EndMainMenuBar();
 }

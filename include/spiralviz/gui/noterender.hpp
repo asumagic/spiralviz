@@ -5,6 +5,15 @@
 
 #include <spiralviz/gui/vizshader.hpp>
 
+struct NoteRenderParams
+{
+    bool enable_controls_gui = false;
+    bool enable_note_render = false;
+    bool show_notes = true;
+    bool show_lines = true;
+    bool use_doremi = true;
+};
+
 class NoteRender
 {
     public:
@@ -15,13 +24,13 @@ class NoteRender
 
     void show_controls_gui();
 
-    private:
-    const VizParams& m_params;
+    NoteRenderParams& params() { return m_params; }
+    const NoteRenderParams& params() const { return m_params; }
 
-    bool m_shown = false;
-    bool m_show_notes = true;
-    bool m_show_lines = true;
-    bool m_use_doremi = true;
+    private:
+    const VizParams& m_viz_params;
+
+    NoteRenderParams m_params;
 
     sf::Font m_note_font;
     sf::Text m_text;

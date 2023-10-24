@@ -8,9 +8,14 @@
 
 void FFTDebugGUI::show_params_gui()
 {
-    ImGui::Begin("FFT parameters");
+    if (!m_params.enable_params_gui) { return; }
 
-    FFTHighLevelConfig new_cfg = m_config;
+    const auto flags = (
+        ImGuiWindowFlags_AlwaysAutoResize
+    );
+    ImGui::Begin("FFT parameters", &m_params.enable_params_gui, flags);
+
+    FFTHighLevelConfig new_cfg = m_fft_hl_config;
 
     // ImGui::SliderFloat("Window size (ms)", &new_cfg.window_size_ms, 5.0f, 1000.0f);
 
@@ -22,15 +27,14 @@ void FFTDebugGUI::show_params_gui()
         "",
         0.0f,
         1.0f,
-        ImVec2(96.0, 32.0)
+        ImVec2(ImGui::GetContentRegionAvail().x, 32.0)
     );
-    ImGui::SameLine();
 
-    if (ImGui::BeginCombo("##combo", get_window_type_string(m_config.type)))
+    if (ImGui::BeginCombo("##combo", get_window_type_string(m_fft_hl_config.type)))
     {
         for (int n = 0; n < 3; n++)
         {
-            bool is_selected = int(m_config.type) == n;
+            bool is_selected = int(m_fft_hl_config.type) == n;
             if (ImGui::Selectable(get_window_type_string(WindowType(n)), is_selected))
                 new_cfg.type = WindowType(n);
             if (is_selected)
@@ -56,37 +60,41 @@ void FFTDebugGUI::show_params_gui()
         );
     }
 
-    if (new_cfg != m_config)
+    if (new_cfg != m_fft_hl_config)
     {
         m_fft.update_from_config(new_cfg.as_fft_config(m_recorder.getSampleRate()));
-        m_config = new_cfg;
+        m_fft_hl_config = new_cfg;
     }
 
-    if (ImGui::Button("Catch up"))
-    {
-        m_recorder.discard_n_oldest();
-    }
+    // Currently hasn't been useful whatsoever
+    // if (ImGui::Button("Catch up"))
+    // {
+    //     m_recorder.discard_n_oldest();
+    // }
 
     ImGui::End();
 }
 
 void FFTDebugGUI::show_fft_gui(std::span<const float> fft_data)
 {
-    ImGui::Begin("FFT");
+    if (!m_params.enable_fft_gui) { return; }
+
+    ImGui::SetNextWindowSizeConstraints(ImVec2(200.0, 100.0), ImVec2(2000.0, 1000.0));
+
+    ImGui::Begin("Raw FFT view", &m_params.enable_fft_gui);
 
     ImGui::PlotLines(
         "##fftplot",
         fft_data.data(),
         fft_data.size(),
         0,
-        nullptr,
+        (std::string() + std::to_string(fft_data.size()) + " values").c_str(),
         0.0,
         1.0,
         ImVec2(
-            ImGui::GetItemRectMax().x,
-            ImGui::GetWindowContentRegionMax().y - 48.0f)
+            ImGui::GetContentRegionAvail().x,
+            ImGui::GetContentRegionAvail().y)
     );
-    ImGui::Text("%d values\n", int(fft_data.size()));
 
     ImGui::End();
 }

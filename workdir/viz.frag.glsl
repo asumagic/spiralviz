@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// Copyright (C) 2022 sdelang
+// Copyright (C) 2023 sdelang
 
 // This is heavily inspired from the following shadertoy demo from windytan:
 // https://www.shadertoy.com/view/ftKGRc

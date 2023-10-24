@@ -15,7 +15,7 @@ project originally spawned as an attempt to be less clueless about it.
 ## Building
 
 Currently, I have only tested on Linux.  
-Ensure that you have fftw3 installed on your system.
+Ensure that you have fftw3 installed on your system. [SFML, dear imgui and ImGui-SFML will be pulled by the CMake script automatically from their respective github repos.](deps/imgui-sfml/CMakeLists.txt)
 
 ```shell
 mkdir build/

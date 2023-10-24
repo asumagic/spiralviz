@@ -20,6 +20,7 @@ add_executable(
     src/gui/fftdebug.cpp
     src/gui/vizshader.cpp
     src/gui/noterender.cpp
+    src/gui/util.cpp
     src/dsp/windowedfft.cpp
     src/dsp/windowfuncs.cpp
 )

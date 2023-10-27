@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include <spiralviz/gui/vizshader.hpp>
+#include <spiralviz/gui/vizutil.hpp>
 
 struct NoteRenderParams
 {
@@ -11,6 +11,7 @@ struct NoteRenderParams
     bool enable_note_render = false;
     bool show_notes = true;
     bool show_lines = true;
+    bool show_freqs = false;
     bool use_doremi = true;
 };
 
@@ -33,5 +34,6 @@ class NoteRender
     NoteRenderParams m_params;
 
     sf::Font m_note_font;
-    sf::Text m_text;
+    sf::Text m_note_text;
+    sf::Text m_freq_text;
 };

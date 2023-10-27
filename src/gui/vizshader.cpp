@@ -93,6 +93,7 @@ void VizShader::reload_uniforms()
     m_shader.setUniform("fft_size", int(m_fft.getSize().x));
     m_shader.setUniform("sample_rate", float(m_sample_rate));
 
+    m_shader.setUniform("spiral_start", m_params.spiral_start);
     m_shader.setUniform("spiral_dis", m_params.spiral_dis);
     m_shader.setUniform("spiral_width", m_params.spiral_width);
     m_shader.setUniform("spiral_blur", m_params.spiral_blur);

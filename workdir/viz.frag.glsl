@@ -30,6 +30,7 @@ uniform float sample_rate;
 // Spiral visual parameters from https://www.shadertoy.com/view/WtjSWt
 // Also some other viz related parameters
 // Uniforms because the application may need to use the same values.
+uniform float spiral_start;
 uniform float spiral_dis;
 uniform float spiral_width;
 uniform float spiral_blur;
@@ -38,20 +39,18 @@ uniform float vol_max;
 
 // Musical constants
 // https://en.wikipedia.org/wiki/12_equal_temperament
-const float A        = 440.0 / 2.;       // Lowest note
-const float tet_root = 1.05946309435929; // 12th root of 2
+const float tune_freq = 220.0;            // FIXME: with the offset this makes less sense
+const float tet_root  = 1.05946309435929; // 12th root of 2
 
 void main() {
     vec2  uv     = gl_FragCoord.xy / resolution.xy;
-
-    // FIXME: this is broken on height>width
-    float aspect = resolution.xy.x / resolution.xy.y;
+    float aspect = resolution.x / resolution.y;
     
     vec2 uvcorrected = uv - vec2(0.5, 0.5);
     uvcorrected.x   *= aspect;
 
     float angle      = atan(uvcorrected.y, uvcorrected.x);
-    float baseoffset = (length(uvcorrected) - 0.05);
+    float baseoffset = (length(uvcorrected) - spiral_start);
     float offset     = baseoffset;
     if (offset > 0.0)
     {
@@ -59,7 +58,7 @@ void main() {
     }
     float which_turn = floor(offset / spiral_dis);
     float cents      = (which_turn - (angle / 2. / PI)) * 1200.;
-    float freq       = A * pow(tet_root, cents / 100.);
+    float freq       = tune_freq * pow(tet_root, cents / 100.);
     float bin        = freq / sample_rate;
     float bri        = texture(fft, vec2(bin, 0.25)).r;
     // float bri = texelFetch(fft, ivec2(int(bin * float(fft_size)), 0), 0).r;

@@ -19,6 +19,7 @@ add_executable(
     src/audio/recorder.cpp
     src/gui/fftdebug.cpp
     src/gui/vizshader.cpp
+    src/gui/vizutil.cpp
     src/gui/noterender.cpp
     src/gui/util.cpp
     src/dsp/windowedfft.cpp

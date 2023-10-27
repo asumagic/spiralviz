@@ -3,18 +3,11 @@
 
 #pragma once
 
+#include <spiralviz/gui/vizutil.hpp>
+
 #include <SFML/Graphics.hpp>
 
 #include <span>
-
-struct VizParams
-{
-    float spiral_dis = 0.05;
-    float spiral_width = 0.03;
-    float spiral_blur = 0.02;
-    float vol_min = 0.0;
-    float vol_max = 0.07;
-};
 
 struct VizPaths
 {

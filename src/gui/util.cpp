@@ -22,6 +22,25 @@ ThickLine& ThickLine::with_points(sf::Vector2f origin, float angle_rads, float l
     return *this;
 }
 
+ThickLine& ThickLine::with_thickness(float thickness)
+{
+    m_thickness = thickness;
+    return *this;
+}
+
+ThickLine &ThickLine::with_color(sf::Color a_color, sf::Color b_color)
+{
+    m_origin_color = a_color;
+    m_target_color = b_color;
+    return *this;
+}
+
+ThickLine &ThickLine::with_color(sf::Color color)
+{
+    with_color(color, color);
+    return *this;
+}
+
 void ThickLine::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     // I wrote this terrible code so that you suffer just as much as I did

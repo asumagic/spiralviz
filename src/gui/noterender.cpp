@@ -83,13 +83,11 @@ void NoteRender::render_into(sf::RenderTarget& target, sf::FloatRect target_rect
             const auto note_name = m_params.use_doremi ? note_names_doremi[i] : note_names_cde[i]; 
             m_note_text.setString(note_name);
 
-            auto text_pos = (
+            m_note_text.setPosition(round(
                 origin
                 + angle_vec * note_dist
                 - sf::Vector2f{m_note_text.getLocalBounds().width * 0.5f, 10.0f}
-            );
-            text_pos = {std::round(text_pos.x), std::round(text_pos.y)};
-            m_note_text.setPosition(text_pos);
+            ));
 
             target.draw(m_note_text);
         }
@@ -106,12 +104,11 @@ void NoteRender::render_into(sf::RenderTarget& target, sf::FloatRect target_rect
                 ss << std::fixed << std::setprecision(0) << note_freq << "Hz";
                 m_freq_text.setString(ss.str());
 
-                auto text_pos = (
+                auto text_pos = round(
                     origin
                     + angle_vec * viz_point.length
                     - sf::Vector2f{m_freq_text.getLocalBounds().width * 0.5f, 5.0f}
                 );
-                text_pos = {std::round(text_pos.x), std::round(text_pos.y)};
 
                 // draw with a shadow offset
                 m_freq_text.setFillColor(sf::Color::Black);

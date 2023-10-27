@@ -21,24 +21,10 @@ class ThickLine : public sf::Drawable
     ThickLine& with_points(sf::Vector2f a, sf::Vector2f b);
     ThickLine& with_points(sf::Vector2f origin, float angle_rad, float length);
 
-    ThickLine& with_thickness(float thickness)
-    {
-        m_thickness = thickness;
-        return *this;
-    }
+    ThickLine& with_thickness(float thickness);
 
-    ThickLine& with_color(sf::Color a_color, sf::Color b_color)
-    {
-        m_origin_color = a_color;
-        m_target_color = b_color;
-        return *this;
-    }
-
-    ThickLine& with_color(sf::Color color)
-    {
-        with_color(color, color);
-        return *this;
-    }
+    ThickLine& with_color(sf::Color a_color, sf::Color b_color);
+    ThickLine& with_color(sf::Color color);
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
@@ -51,3 +37,9 @@ class ThickLine : public sf::Drawable
     sf::Color m_origin_color = sf::Color::White;
     sf::Color m_target_color = sf::Color::White;
 };
+
+template<class T>
+sf::Vector2<T> round(sf::Vector2<T> vec)
+{
+    return { std::round(vec.x), std::round(vec.y) };
+}

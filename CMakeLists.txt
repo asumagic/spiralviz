@@ -22,6 +22,7 @@ add_executable(
     src/gui/vizshader.cpp
     src/gui/vizutil.cpp
     src/gui/noterender.cpp
+    src/gui/pianohighlights.cpp
     src/gui/util.cpp
     src/dsp/windowedfft.cpp
     src/dsp/windowfuncs.cpp

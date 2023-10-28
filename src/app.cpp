@@ -6,6 +6,7 @@
 
 #include <spiralviz/audio/recorder.hpp>
 #include <spiralviz/dsp/windowedfft.hpp>
+#include <spiralviz/gui/pianohighlights.hpp>
 
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
@@ -79,6 +80,14 @@ void App::show_until_closed()
         // m_window.clear(); // not necessary with a fullscreen shader
         m_viz.render_into(m_window);
         m_note_render.render_into(m_window);
+
+        // static PianoHighlights ph;
+        // std::bitset<piano_key_count> test_bitset;
+        // for (int i = 0; i < 88; i += 2)
+        // {
+        //     test_bitset[i] = true;
+        // }
+        // ph.render_piano(m_window, sf::Vector2f(32, 32), test_bitset);
 
         ImGui::SFML::Render(m_window);
 

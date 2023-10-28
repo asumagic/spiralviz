@@ -53,17 +53,13 @@ void main() {
 
     float angle      = atan(uvcorrected.y, uvcorrected.x);
     float baseoffset = (length(uvcorrected) - spiral_start);
-    float offset     = baseoffset;
-    if (offset > 0.0)
-    {
-        offset += (angle/(2. * PI)) * spiral_dis;
-    }
+    float offset     = baseoffset + (angle/(2. * PI)) * spiral_dis;
     float which_turn = floor(offset / spiral_dis);
-    float cents      = (which_turn - (angle / 2. / PI)) * 1200.;
+    float cents      = (which_turn - (angle/(2. * PI))) * 1200.;
     float freq       = tune_freq * pow(tet_root, cents / 100.);
     float bin        = freq / sample_rate;
     float bri;
-    
+
     if (smooth_fft == 1)
     {
         bri = texture(fft, vec2(bin, 0.25)).r;

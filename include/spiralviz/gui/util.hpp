@@ -43,3 +43,9 @@ sf::Vector2<T> round(sf::Vector2<T> vec)
 {
     return { std::round(vec.x), std::round(vec.y) };
 }
+
+template<class T>
+T length(sf::Vector2<T> vec)
+{
+    return std::sqrt((vec.x * vec.x) + (vec.y * vec.y));
+}

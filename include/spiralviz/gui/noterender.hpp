@@ -5,14 +5,40 @@
 
 #include <spiralviz/gui/vizutil.hpp>
 
+enum class SeriesAnalyzerMode : int
+{
+    HARMONIC_SERIES = 0,
+    MAJOR_CHORD,
+    MINOR_CHORD,
+    TOTAL
+};
+
+static constexpr const char* get_series_analyzer_mode_string(SeriesAnalyzerMode mode)
+{
+    switch (mode)
+    {
+    case SeriesAnalyzerMode::HARMONIC_SERIES: return "Harmonic series";
+    case SeriesAnalyzerMode::MAJOR_CHORD: return "Major chord";
+    case SeriesAnalyzerMode::MINOR_CHORD: return "Minor chord";
+    default: return "???";
+    }
+}
+
 struct NoteRenderParams
 {
     bool enable_controls_gui = false;
+
     bool enable_note_render = false;
     bool show_notes = true;
     bool show_lines = true;
     bool show_freqs = false;
     bool use_doremi = true;
+
+    bool enable_series_analyzer = false;
+    SeriesAnalyzerMode series_analyzer_mode = SeriesAnalyzerMode::HARMONIC_SERIES;
+
+    int note_font_size = 20;
+    int freq_font_size = 10;
 };
 
 class NoteRender
@@ -22,6 +48,11 @@ class NoteRender
 
     void render_into(sf::RenderTarget& target, sf::FloatRect target_rect);
     void render_into(sf::RenderTarget& target);
+
+    void render_note_indicator_into(sf::RenderTarget& target, sf::FloatRect target_rect);
+    void render_series_analyzer_into(sf::RenderTarget& target, sf::FloatRect target_rect);
+
+    void render_freq_indicator(sf::RenderTarget& target, sf::FloatRect target_rect, float frequency, float thickness, sf::Color color);
 
     void show_controls_gui();
 

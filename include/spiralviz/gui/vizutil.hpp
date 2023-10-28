@@ -21,14 +21,21 @@ struct VizParams
 
 struct VizPointInformation
 {
+    float cents;
     float frequency;
+    float bin_float;
+    int bin;
 };
 
 struct VizLocationInformation
 {
     float angle;
     float length;
+    float band_start_length;
+    float band_end_length;
 };
 
-VizPointInformation viz_info_at_position(sf::Vector2f screen_pos, float viz_size, const VizParams& params);
-VizLocationInformation viz_point_from_frequency(double halftones_from_ref, float viz_size, const VizParams& params);
+sf::Vector2f viz_origin(sf::Vector2f target_resolution);
+VizPointInformation viz_info_at_position(sf::Vector2f screen_pos, sf::Vector2f target_resolution, const VizParams& params);
+VizLocationInformation viz_points_from_cents(double cents, sf::Vector2f target_resolution, const VizParams& params);
+double viz_cents_from_frequency(double frequency);

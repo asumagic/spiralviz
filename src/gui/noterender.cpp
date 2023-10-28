@@ -29,14 +29,16 @@ static constexpr std::array<const char*, 12> note_names_doremi {
 //     false, true, false, false, true, false, true, false, false, true, false, true
 // };
 
-static constexpr std::array<float, 3> chord_major = { 0.0f, 4.0f, 7.0f };
-static constexpr std::array<float, 3> chord_minor = { 0.0f, 3.0f, 7.0f };
+// Defined as half-tone offsets from the reference (which is the user cursor)
+static constexpr std::array chord_major = { 0.0f, 4.0f, 7.0f };
+static constexpr std::array chord_minor = { 0.0f, 3.0f, 7.0f };
+static constexpr std::array scale_major = { 0.0f, 2.0f, 4.0f, 5.0f, 7.0f, 9.0f, 10.0f };
 
 // Based on the Set1 colormap from matplotlib, see
 // https://matplotlib.org/stable/gallery/color/colormap_reference.html
 static const std::array<sf::Color, 8> default_palette {
-    sf::Color{0x1F77B4FF},
-    sf::Color{0xFF7F0EFF},
+    sf::Color{0xE41A1CFF},
+    sf::Color{0x377EB8FF},
     sf::Color{0x4DAF4AFF},
     sf::Color{0x984EA3FF},
     sf::Color{0xFF7F00FF},
@@ -173,7 +175,8 @@ void NoteRender::render_series_analyzer_into(sf::RenderTarget& target, sf::Float
     float main_cents = freq_info.cents;
     float main_freq = freq_info.frequency;
 
-    if (ImGui::IsKeyDown(ImGuiKey_LeftShift))
+    // XOR
+    if (ImGui::IsKeyDown(ImGuiKey_LeftShift) != m_params.lock_cursor_to_notes)
     {
         main_cents = std::round(main_cents / 100.0) * 100.0;
         main_freq = note_frequency(main_cents, 55.0);
@@ -213,11 +216,13 @@ void NoteRender::render_series_analyzer_into(sf::RenderTarget& target, sf::Float
 
     case SeriesAnalyzerMode::MAJOR_CHORD:
     case SeriesAnalyzerMode::MINOR_CHORD:
+    case SeriesAnalyzerMode::SCALE_MAJOR:
     {
         using Chord = std::span<const float>;
         const auto chord_list = (
             mode == SeriesAnalyzerMode::MAJOR_CHORD ? Chord(chord_major) :
-            Chord(chord_minor)
+            mode == SeriesAnalyzerMode::MINOR_CHORD ? Chord(chord_minor) :
+            Chord(scale_major) 
         );
 
         std::size_t palette_index = 0;
@@ -248,7 +253,7 @@ void NoteRender::render_freq_indicator(sf::RenderTarget& target, sf::FloatRect t
     const sf::Vector2f target_resolution { target_rect.width, target_rect.height };
     const auto origin = viz_origin(target_resolution);
 
-    if (frequency < 20.0) { return; }
+    if (frequency < 30.0) { return; }
     if (frequency > 22000.0) { return; }
 
     const float cents = viz_cents_from_frequency(frequency);
@@ -342,6 +347,15 @@ void NoteRender::show_controls_gui()
                 const auto current = SeriesAnalyzerMode(i);
                 const bool is_selected = m_params.series_analyzer_mode == current;
 
+                if (current == SeriesAnalyzerMode::CHORDS_BEGIN)
+                {
+                    ImGui::SeparatorText("Chords");
+                }
+                else if (current == SeriesAnalyzerMode::SCALES_BEGIN)
+                {
+                    ImGui::SeparatorText("Scales");
+                }
+
                 if (ImGui::Selectable(get_series_analyzer_mode_string(current), is_selected))
                 {
                     m_params.series_analyzer_mode = current;
@@ -355,6 +369,8 @@ void NoteRender::show_controls_gui()
 
             ImGui::EndCombo();
         }
+
+        ImGui::Checkbox("Lock cursor to 12-TET notes (or hold SHIFT)", &m_params.lock_cursor_to_notes);
 
         // if (!m_params.enable_series_analyzer)
         // {

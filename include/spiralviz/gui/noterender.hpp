@@ -8,8 +8,11 @@
 enum class SeriesAnalyzerMode : int
 {
     HARMONIC_SERIES = 0,
-    MAJOR_CHORD,
+    CHORDS_BEGIN,
+    MAJOR_CHORD = CHORDS_BEGIN,
     MINOR_CHORD,
+    SCALES_BEGIN,
+    SCALE_MAJOR = SCALES_BEGIN,
     TOTAL
 };
 
@@ -20,6 +23,7 @@ static constexpr const char* get_series_analyzer_mode_string(SeriesAnalyzerMode 
     case SeriesAnalyzerMode::HARMONIC_SERIES: return "Harmonic series";
     case SeriesAnalyzerMode::MAJOR_CHORD: return "Major chord";
     case SeriesAnalyzerMode::MINOR_CHORD: return "Minor chord";
+    case SeriesAnalyzerMode::SCALE_MAJOR: return "Major scale";
     default: return "???";
     }
 }
@@ -35,6 +39,7 @@ struct NoteRenderParams
     bool use_doremi = true;
 
     bool enable_series_analyzer = false;
+    bool lock_cursor_to_notes = true;
     SeriesAnalyzerMode series_analyzer_mode = SeriesAnalyzerMode::HARMONIC_SERIES;
 
     int note_font_size = 20;

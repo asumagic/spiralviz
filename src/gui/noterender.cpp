@@ -32,7 +32,7 @@ static constexpr std::array<const char*, 12> note_names_doremi {
 // Defined as half-tone offsets from the reference (which is the user cursor)
 static constexpr std::array chord_major = { 0.0f, 4.0f, 7.0f };
 static constexpr std::array chord_minor = { 0.0f, 3.0f, 7.0f };
-static constexpr std::array scale_major = { 0.0f, 2.0f, 4.0f, 5.0f, 7.0f, 9.0f, 10.0f };
+static constexpr std::array scale_major = { 0.0f, 2.0f, 4.0f, 5.0f, 7.0f, 9.0f, 11.0f };
 
 // Based on the Set1 colormap from matplotlib, see
 // https://matplotlib.org/stable/gallery/color/colormap_reference.html

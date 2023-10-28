@@ -17,6 +17,7 @@ add_executable(
     src/app.cpp
     src/fftstreamer.cpp
     src/audio/recorder.cpp
+    src/gui/audioinput.cpp
     src/gui/fftdebug.cpp
     src/gui/vizshader.cpp
     src/gui/vizutil.cpp

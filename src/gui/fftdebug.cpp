@@ -30,7 +30,7 @@ void FFTDebugGUI::show_params_gui()
         ImVec2(ImGui::GetContentRegionAvail().x, 32.0)
     );
 
-    if (ImGui::BeginCombo("##combo", get_window_type_string(m_fft_hl_config.type)))
+    if (ImGui::BeginCombo("##ffttype", get_window_type_string(m_fft_hl_config.type)))
     {
         for (int n = 0; n < 3; n++)
         {

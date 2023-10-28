@@ -32,7 +32,10 @@ App::App() :
         &m_hl_config,
         &m_streamer.fft(),
         &m_streamer.recorder()
-    }
+    },
+    m_audio_input_gui(
+        &m_streamer.recorder()
+    )
 {
     m_window.setFramerateLimit(240);
     if (!ImGui::SFML::Init(m_window))
@@ -64,8 +67,9 @@ void App::show_until_closed()
             // imgui stuff -- note that this actually gets pushed on the screen
             // when ImGui::SFML::Render is called, so it's ok to do this here.
             // ImGui::ShowDemoWindow();
-            m_fft_gui.show_params_gui();
             m_note_render.show_controls_gui();
+            m_fft_gui.show_params_gui();
+            m_audio_input_gui.show_gui();
         }
 
         // Rendering
@@ -154,7 +158,10 @@ void App::show_main_bar_gui()
 
     if (ImGui::BeginMenu("View"))
     {
-        ImGui::TextColored(heading_color, "- FFT");
+        ImGui::TextColored(heading_color, "- Audio");
+        menu_bool("Input settings", &m_audio_input_gui.params().enable_input_gui);
+
+        ImGui::TextColored(heading_color, "- Spectrogram");
         menu_bool("FFT parameters", &m_fft_gui.params().enable_params_gui);
         menu_bool("Raw FFT view", &m_fft_gui.params().enable_fft_gui);
 

@@ -6,6 +6,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
+#include <spiralviz/gui/audioinput.hpp>
 #include <spiralviz/gui/vizshader.hpp>
 #include <spiralviz/gui/fftdebug.hpp>
 #include <spiralviz/gui/noterender.hpp>
@@ -40,4 +41,5 @@ class App
 
     // Debug GUIs at the end since they refer to our fields
     FFTDebugGUI m_fft_gui;
+    AudioInputGUI m_audio_input_gui;
 };

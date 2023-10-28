@@ -160,11 +160,11 @@ void App::show_main_bar_gui()
     {
         ImGui::TextColored(heading_color, "- Audio");
         menu_bool("Input settings", &m_audio_input_gui.params().enable_input_gui);
+        ImGui::Spacing();
 
         ImGui::TextColored(heading_color, "- Spectrogram");
         menu_bool("FFT parameters", &m_fft_gui.params().enable_params_gui);
         menu_bool("Raw FFT view", &m_fft_gui.params().enable_fft_gui);
-
         ImGui::Spacing();
 
         ImGui::TextColored(heading_color, "- Note display");

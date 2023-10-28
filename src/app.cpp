@@ -245,8 +245,6 @@ void App::show_main_bar_gui()
     ImGui::TextColored(ImVec4(1.0, 1.0, 1.0, 0.5), "Spiralviz");
     ImGui::Spacing();
 
-    const ImVec4 heading_color(1.0, 1.0, 1.0, 0.8);
-
     const auto menu_bool = [](const char* name, bool* setting) {
         if (ImGui::MenuItem(name, nullptr, *setting))
         {
@@ -256,16 +254,15 @@ void App::show_main_bar_gui()
 
     if (ImGui::BeginMenu("View"))
     {
-        ImGui::TextColored(heading_color, "- Audio");
+        ImGui::SeparatorText("Audio");
         menu_bool("Input settings", &m_audio_input_gui.params().enable_input_gui);
-        ImGui::Spacing();
 
-        ImGui::TextColored(heading_color, "- Spectrogram");
+        ImGui::SeparatorText("Spectrogram");
         menu_bool("Spectrogram settings", &m_fft_gui.params().enable_params_gui);
         menu_bool("Raw FFT view", &m_fft_gui.params().enable_fft_gui);
         ImGui::Spacing();
 
-        ImGui::TextColored(heading_color, "- Note display");
+        ImGui::SeparatorText("Note display");
         menu_bool("Overlay settings", &m_note_render.params().enable_controls_gui);
 
         ImGui::EndMenu();

@@ -63,11 +63,7 @@ void WindowedFFT::populate_fft_buffer()
 {
     for (std::size_t i = 0; i < m_sample_buffer.size(); ++i)
     {
-        InSample in_sample_int = m_sample_buffer[i];
-        float in_sample_norm = (float(in_sample_int)) / 32768.0f;
-        float in_sample_windowed = m_config.window_factors[i] * in_sample_norm;
-
-        m_fft_in_buffer[i] = in_sample_windowed;
+        m_fft_in_buffer[i] = m_config.window_factors[i] * m_sample_buffer[i];
     }
 }
 
@@ -88,7 +84,7 @@ void WindowedFFT::update_from_config(const FFTConfig& config)
     m_config = config;
 }
 
-std::span<float> WindowedFFT::consume_samples(std::span<const InSample> incoming)
+std::span<float> WindowedFFT::consume_samples(std::span<const FFTInSample> incoming)
 {
     assert(incoming.size() < m_config.window_size_samples);
 

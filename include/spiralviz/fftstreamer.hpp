@@ -31,5 +31,5 @@ class FFTStreamer
     SampleQueueRecorder m_recorder;
     WindowedFFT m_fft;
 
-    std::vector<std::int16_t> m_sample_buffer;
+    std::vector<float> m_sample_buffer;
 };

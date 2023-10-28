@@ -16,7 +16,7 @@
 
 using FFTWFloat = float;
 using FFTWComplex = fftwf_complex;
-using InSample = std::int16_t;
+using FFTInSample = float;
 using FFTWFPlan = std::remove_pointer_t<fftwf_plan>;
 
 struct FFTWFAllocDeleter
@@ -79,7 +79,7 @@ public:
     /// new FFT with the desired parameters, then returns a span representing
     /// the output of the FFT which will remain valid and can be written to
     /// until any further action is performed on this object.
-    std::span<float> consume_samples(std::span<const InSample> samples);
+    std::span<float> consume_samples(std::span<const FFTInSample> samples);
 
     /// Clears the internal buffer so that all samples become zero. Does not
     /// cause reallocation and does not touch the internal fftw objects.
@@ -96,7 +96,7 @@ private:
 
     FFTConfig m_config;
 
-    std::vector<InSample> m_sample_buffer;
+    std::vector<FFTInSample> m_sample_buffer;
 
     std::unique_ptr<FFTWFloat[], FFTWFAllocDeleter> m_fft_in_buffer;
     std::unique_ptr<FFTWComplex[], FFTWFAllocDeleter> m_fft_out_buffer;

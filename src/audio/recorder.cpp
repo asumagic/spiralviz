@@ -11,7 +11,15 @@ SampleQueueRecorder::SampleQueueRecorder()
 bool SampleQueueRecorder::onProcessSamples(const sf::Int16* samples, std::size_t sampleCount)
 {
     std::lock_guard lk{m_stream_lock};
-    m_sample_stream.insert(m_sample_stream.end(), samples, samples + sampleCount);
+    
+    const auto old_size = m_sample_stream.size();
+    m_sample_stream.resize(old_size + sampleCount);
+
+    for (std::size_t i = 0; i < sampleCount; ++i)
+    {
+        m_sample_stream[old_size + i] = samples[i] / 32768.0f;
+    }
+
     return true;
 }
 
@@ -21,7 +29,7 @@ void SampleQueueRecorder::onStop()
     m_sample_stream.clear();
 }
 
-std::size_t SampleQueueRecorder::consume_n_oldest(std::vector<std::int16_t>& target, std::size_t desired)
+std::size_t SampleQueueRecorder::consume_n_oldest(std::vector<float>& target, std::size_t desired)
 {
     std::lock_guard lk{m_stream_lock};
 

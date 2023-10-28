@@ -84,10 +84,6 @@ void main() {
     // Control the curve of the color mapping. Try e.g. 2. or 4.
     bri = pow(bri, 1.5);
 
-    if (baseoffset <= 0.1) {
-        bri *= baseoffset / 0.1;
-    }
-
     // vec3 lineColor = texture(cmap, vec2(bri, 0.25)).rgb;
     vec3 lineColor = vec3(bri*1.0, bri*0.25, bri*0.1 + 0.20*(1.0-baseoffset*2.0));
 
@@ -97,6 +93,10 @@ void main() {
         ? vec3(0., 0., 0.)
         : (smoothstep(circles-spiral_blur, circles, spiral_width) -
            smoothstep(circles, circles+spiral_blur, spiral_width)) * lineColor);
+
+    if (baseoffset <= 0.01) {
+        col.rgb *= baseoffset / 0.01;
+    }
 
     gl_FragColor   = vec4(col, 1.);
 }

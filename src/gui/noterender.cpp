@@ -224,7 +224,7 @@ void NoteRender::render_series_analyzer_into(sf::RenderTarget& target, sf::Float
         for (const float semitones_offset : chord_list)
         {
             const float chord_note_freq = main_freq * std::pow(tet_root, semitones_offset);
-            const float thickness = semitones_offset != 0.0f ? 4.0f : 8.0f;
+            const float thickness = semitones_offset != 0.0f ? 12.0f : 16.0f;
             sf::Color color = sf::Color::White;
 
             if (semitones_offset != 0.0f)
@@ -248,7 +248,7 @@ void NoteRender::render_freq_indicator(sf::RenderTarget& target, sf::FloatRect t
     const sf::Vector2f target_resolution { target_rect.width, target_rect.height };
     const auto origin = viz_origin(target_resolution);
 
-    if (frequency < 30.0) { return; }
+    if (frequency < 20.0) { return; }
     if (frequency > 22000.0) { return; }
 
     const float cents = viz_cents_from_frequency(frequency);
@@ -257,13 +257,36 @@ void NoteRender::render_freq_indicator(sf::RenderTarget& target, sf::FloatRect t
     sf::Vector2f angle_unit_vec { std::cos(info.angle), std::sin(info.angle) };
     const float band_width_px = target_rect.height * m_viz_params.spiral_dis;
 
-    const auto band_start_pos = origin + angle_unit_vec * (info.band_start_length + 0.1f * band_width_px);
-    const auto band_end_pos = origin + angle_unit_vec * (info.band_end_length - 0.1f * band_width_px);
+    constexpr float gradient_start = 0.05f;
+    constexpr float plain_start = 0.15f;
+
+    const auto band_gradient_start_pos = origin + angle_unit_vec * (info.band_start_length + gradient_start * band_width_px);
+    const auto band_start_pos = origin + angle_unit_vec * (info.band_start_length + plain_start * band_width_px);
+    const auto band_end_pos = origin + angle_unit_vec * (info.band_end_length - plain_start * band_width_px);
+    const auto band_gradient_end_pos = origin + angle_unit_vec * (info.band_end_length - gradient_start * band_width_px);
+
+    sf::RenderStates render_states;
+    // render_states.blendMode = sf::BlendMode(sf::BlendMode::SrcColor, sf::BlendMode::DstColor);
+
+    target.draw(
+        ThickLine(band_gradient_start_pos, band_start_pos)
+            .with_color(sf::Color::Transparent, color)
+            .with_thickness(thickness),
+        render_states
+    );
 
     target.draw(
         ThickLine(band_start_pos, band_end_pos)
             .with_color(color)
-            .with_thickness(thickness)
+            .with_thickness(thickness),
+        render_states
+    );
+
+    target.draw(
+        ThickLine(band_end_pos, band_gradient_end_pos)
+            .with_color(color, sf::Color::Transparent)
+            .with_thickness(thickness),
+        render_states
     );
 }
 

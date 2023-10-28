@@ -11,6 +11,8 @@
 constexpr std::size_t piano_key_count = 88;
 
 // TODO: make this a sf::Renderable so that it can be positioned more easily
+// TODO: probably should render to a RenderTexture to embed in imgui
+// TODO: also return the size? or have a global static for the max piano size
 
 class PianoHighlights
 {

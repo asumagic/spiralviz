@@ -17,9 +17,10 @@ void FFTDebugGUI::show_params_gui()
 
     const auto header_flags = (
         ImGuiTreeNodeFlags_DefaultOpen
+        | ImGuiTreeNodeFlags_Framed
     );
 
-    if (ImGui::CollapsingHeader("FFT parameters", header_flags))
+    if (ImGui::TreeNodeEx("FFT parameters", header_flags))
     {
         FFTHighLevelConfig new_cfg = m_fft_hl_config;
 
@@ -71,9 +72,11 @@ void FFTDebugGUI::show_params_gui()
             m_fft.update_from_config(new_cfg.as_fft_config(m_recorder.getSampleRate()));
             m_fft_hl_config = new_cfg;
         }
+
+        ImGui::TreePop();
     }
 
-    if (ImGui::CollapsingHeader("Visualization settings", header_flags))
+    if (ImGui::TreeNodeEx("Visualization settings", header_flags))
     {
         const auto volume_slider_flags = (
             ImGuiSliderFlags_Logarithmic
@@ -87,6 +90,8 @@ void FFTDebugGUI::show_params_gui()
         ImGui::SliderFloat("Band width", &m_viz_params.spiral_width, 0.001f, 0.2f);
         ImGui::SliderFloat("Band blur", &m_viz_params.spiral_blur, 0.001f, 0.2f);
         ImGui::Checkbox("Smooth", &m_viz_params.smooth_fft);
+
+        ImGui::TreePop();
     }
 
     // Currently hasn't been useful whatsoever

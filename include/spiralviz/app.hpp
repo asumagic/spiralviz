@@ -22,6 +22,8 @@ class App
     void show_until_closed();
 
     private:
+    void imgui_apply_theme();
+
     void handle_event(const sf::Event& ev);
 
     void update_fft(sf::Time dt);

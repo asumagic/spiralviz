@@ -274,9 +274,14 @@ void NoteRender::show_controls_gui()
     const auto flags = (
         ImGuiWindowFlags_AlwaysAutoResize
     );
+
     ImGui::Begin("12-TET overlay", &m_params.enable_controls_gui, flags);
 
-    if (ImGui::CollapsingHeader("12-TET overlay", ImGuiTreeNodeFlags_DefaultOpen))
+    const auto header_flags = (
+        ImGuiTreeNodeFlags_Framed
+    );
+
+    if (ImGui::TreeNodeEx("12-TET overlay", header_flags | ImGuiTreeNodeFlags_DefaultOpen))
     {
         ImGui::Checkbox("Enable overlay", &m_params.enable_note_render);
 
@@ -294,9 +299,11 @@ void NoteRender::show_controls_gui()
         {
             ImGui::EndDisabled();
         }
+
+        ImGui::TreePop();
     }
 
-    if (ImGui::CollapsingHeader("Series analyzer", ImGuiTreeNodeFlags_DefaultOpen))
+    if (ImGui::TreeNodeEx("Series analyzer", header_flags | ImGuiTreeNodeFlags_DefaultOpen))
     {
         ImGui::Checkbox("Enable series analyzer", &m_params.enable_series_analyzer);
 
@@ -330,12 +337,16 @@ void NoteRender::show_controls_gui()
         // {
         //     ImGui::EndDisabled();
         // }
+
+        ImGui::TreePop();
     }
 
-    if (ImGui::CollapsingHeader("Visual tweaks"))
+    if (ImGui::TreeNodeEx("Visual tweaks", header_flags))
     {
         ImGui::SliderInt("Note font size", &m_params.note_font_size, 2, 60);
         ImGui::SliderInt("Text font size", &m_params.freq_font_size, 2, 60);
+
+        ImGui::TreePop();
     }
 
     ImGui::End();

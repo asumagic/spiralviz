@@ -100,5 +100,7 @@ void VizShader::reload_uniforms()
     m_shader.setUniform("vol_min", m_params.vol_min);
     m_shader.setUniform("vol_max", m_params.vol_max);
 
+    m_shader.setUniform("smooth_fft", m_params.smooth_fft);
+
     m_shader.setUniform("cmap", m_colormap);
 }

@@ -37,6 +37,8 @@ uniform float spiral_blur;
 uniform float vol_min;
 uniform float vol_max;
 
+uniform int smooth_fft; // bool 0/1
+
 // Musical constants
 // https://en.wikipedia.org/wiki/12_equal_temperament
 const float tune_freq = 220.0;            // FIXME: with the offset this makes less sense
@@ -60,12 +62,16 @@ void main() {
     float cents      = (which_turn - (angle / 2. / PI)) * 1200.;
     float freq       = tune_freq * pow(tet_root, cents / 100.);
     float bin        = freq / sample_rate;
-    float bri        = texture(fft, vec2(bin, 0.25)).r;
-    // float bri = texelFetch(fft, ivec2(int(bin * float(fft_size)), 0), 0).r;
-
-    // gl_FragColor.rgb = vec3(offset);
-    // gl_FragColor.a = 1.0;
-    // return;
+    float bri;
+    
+    if (smooth_fft == 1)
+    {
+        bri = texture(fft, vec2(bin, 0.25)).r;
+    }
+    else
+    {
+        bri = texelFetch(fft, ivec2(int(bin * float(fft_size)), 0), 0).r;
+    }
 
     if (baseoffset <= 0.0) {
         gl_FragColor.rgba = vec4(vec3(0.0), 1.0);
@@ -73,7 +79,6 @@ void main() {
     }
 
     bri = (bri - vol_min) / (vol_max - vol_min);
-    // bri = log(bri);
     bri = max(bri, 0.);
 
     // Control the curve of the color mapping. Try e.g. 2. or 4.

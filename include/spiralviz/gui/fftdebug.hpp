@@ -7,6 +7,7 @@
 
 #include <spiralviz/dsp/windowedfft.hpp>
 #include <spiralviz/audio/recorder.hpp>
+#include <spiralviz/gui/vizutil.hpp>
 
 struct FFTDebugParams
 {
@@ -18,8 +19,15 @@ struct FFTDebugParams
 class FFTDebugGUI
 {
     public:
-    FFTDebugGUI(FFTHighLevelConfig* config, WindowedFFT* fft, SampleQueueRecorder* recorder) :
-        m_fft_hl_config{*config}, m_fft{*fft}, m_recorder{*recorder}
+    FFTDebugGUI(
+        FFTHighLevelConfig* config,
+        VizParams* viz_params,
+        WindowedFFT* fft,
+        SampleQueueRecorder* recorder) :
+        m_fft_hl_config{*config},
+        m_viz_params{*viz_params},
+        m_fft{*fft},
+        m_recorder{*recorder}
     {}
 
     void show_params_gui();
@@ -31,6 +39,7 @@ class FFTDebugGUI
     private:
     FFTDebugParams m_params;
     FFTHighLevelConfig& m_fft_hl_config;
+    VizParams& m_viz_params;
     WindowedFFT& m_fft;
     SampleQueueRecorder& m_recorder;
 };

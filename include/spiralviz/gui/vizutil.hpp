@@ -14,7 +14,9 @@ struct VizParams
     float spiral_width = 0.03;
     float spiral_blur = 0.02;
     float vol_min = 0.0;
-    float vol_max = 0.07;
+    float vol_max = 0.3;
+
+    bool smooth_fft = true;
 };
 
 struct VizPointInformation

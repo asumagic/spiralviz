@@ -109,8 +109,19 @@ std::span<float> WindowedFFT::consume_samples(std::span<const FFTInSample> incom
     {
         const auto [real, imag] = m_fft_out_buffer[i];
         const auto amplitude = std::sqrt(real*real + imag*imag);
-        // float_out_buffer[i] = amplitude / final_output_size; // too harsh..?
-        float_out_buffer[i] = amplitude * 0.002f;
+
+        // there seems to be more than one way to normalize the output of a DFT,
+        // and I am not really qualified enough in DSP to tell which is the
+        // best.
+        //
+        // however, dividing by sqrt(N) rather than N yields more sensible
+        // values for our use, so let's use that?
+        // the proper answer might also depend on the fact we're using a window
+        // function...
+        //
+        // found some discussion here:
+        // https://dsp.stackexchange.com/questions/63001/why-should-i-scale-the-fft-using-1-n
+        float_out_buffer[i] = amplitude / std::sqrt(final_output_size);
     }
 
     return std::span{float_out_buffer, final_output_size};

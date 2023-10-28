@@ -30,6 +30,7 @@ App::App() :
     },
     m_fft_gui{
         &m_hl_config,
+        &m_viz.params(),
         &m_streamer.fft(),
         &m_streamer.recorder()
     },
@@ -163,7 +164,7 @@ void App::show_main_bar_gui()
         ImGui::Spacing();
 
         ImGui::TextColored(heading_color, "- Spectrogram");
-        menu_bool("FFT parameters", &m_fft_gui.params().enable_params_gui);
+        menu_bool("Spectrogram settings", &m_fft_gui.params().enable_params_gui);
         menu_bool("Raw FFT view", &m_fft_gui.params().enable_fft_gui);
         ImGui::Spacing();
 

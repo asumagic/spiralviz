@@ -3,7 +3,10 @@
 
 #pragma once
 
+#include <spiralviz/gui/pianohighlights.hpp>
 #include <spiralviz/gui/vizutil.hpp>
+
+#include <span>
 
 enum class SeriesAnalyzerMode : int
 {
@@ -16,6 +19,13 @@ enum class SeriesAnalyzerMode : int
     TOTAL
 };
 
+// Defined as half-tone offsets from the reference (which is the user cursor)
+// TODO: More to come + handling repetition (other color?) + setting reference note
+// TODO: Handling inversions?
+static constexpr std::array chord_major = { 0.0f, 4.0f, 7.0f };
+static constexpr std::array chord_minor = { 0.0f, 3.0f, 7.0f };
+static constexpr std::array scale_major = { 0.0f, 2.0f, 4.0f, 5.0f, 7.0f, 9.0f, 11.0f };
+
 static constexpr const char* get_series_analyzer_mode_string(SeriesAnalyzerMode mode)
 {
     switch (mode)
@@ -25,6 +35,17 @@ static constexpr const char* get_series_analyzer_mode_string(SeriesAnalyzerMode 
     case SeriesAnalyzerMode::MINOR_CHORD: return "Minor chord";
     case SeriesAnalyzerMode::SCALE_MAJOR: return "Major scale";
     default: return "???";
+    }
+}
+
+static constexpr std::span<const float> get_series_analyzer_chord(SeriesAnalyzerMode mode)
+{
+    switch (mode)
+    {
+    case SeriesAnalyzerMode::MAJOR_CHORD: return {chord_major};
+    case SeriesAnalyzerMode::MINOR_CHORD: return {chord_minor};
+    case SeriesAnalyzerMode::SCALE_MAJOR: return {scale_major};
+    default: return {};
     }
 }
 
@@ -59,6 +80,8 @@ class NoteRender
 
     void render_freq_indicator(sf::RenderTarget& target, sf::FloatRect target_rect, float frequency, float thickness, sf::Color color);
 
+    void draw_piano(SeriesAnalyzerMode mode);
+
     void show_controls_gui();
 
     NoteRenderParams& params() { return m_params; }
@@ -72,4 +95,7 @@ class NoteRender
     sf::Font m_note_font;
     sf::Text m_note_text;
     sf::Text m_freq_text;
+
+    PianoHighlights m_highlights;
+    std::unordered_map<SeriesAnalyzerMode, sf::RenderTexture> m_highlights_cache;
 };

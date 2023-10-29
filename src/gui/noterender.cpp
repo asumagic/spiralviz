@@ -12,6 +12,8 @@
 
 #include <sstream> // sorry
 #include <iomanip>
+#include <tuple>
+#include <utility>
 
 // TODO: move to dsp/music common?
 
@@ -28,11 +30,6 @@ static constexpr std::array<const char*, 12> note_names_doremi {
 // static constexpr std::array<bool, 12> sharp_table = {
 //     false, true, false, false, true, false, true, false, false, true, false, true
 // };
-
-// Defined as half-tone offsets from the reference (which is the user cursor)
-static constexpr std::array chord_major = { 0.0f, 4.0f, 7.0f };
-static constexpr std::array chord_minor = { 0.0f, 3.0f, 7.0f };
-static constexpr std::array scale_major = { 0.0f, 2.0f, 4.0f, 5.0f, 7.0f, 9.0f, 11.0f };
 
 // Based on the Set1 colormap from matplotlib, see
 // https://matplotlib.org/stable/gallery/color/colormap_reference.html
@@ -218,15 +215,9 @@ void NoteRender::render_series_analyzer_into(sf::RenderTarget& target, sf::Float
     case SeriesAnalyzerMode::MINOR_CHORD:
     case SeriesAnalyzerMode::SCALE_MAJOR:
     {
-        using Chord = std::span<const float>;
-        const auto chord_list = (
-            mode == SeriesAnalyzerMode::MAJOR_CHORD ? Chord(chord_major) :
-            mode == SeriesAnalyzerMode::MINOR_CHORD ? Chord(chord_minor) :
-            Chord(scale_major) 
-        );
-
         std::size_t palette_index = 0;
-        for (const float semitones_offset : chord_list)
+        const auto semitones = get_series_analyzer_chord(mode);
+        for (const float semitones_offset : semitones)
         {
             const float chord_note_freq = main_freq * std::pow(tet_root, semitones_offset);
             const float thickness = semitones_offset != 0.0f ? 12.0f : 16.0f;
@@ -356,9 +347,18 @@ void NoteRender::show_controls_gui()
                     ImGui::SeparatorText("Scales");
                 }
 
+                ImGui::PushItemWidth(128);
                 if (ImGui::Selectable(get_series_analyzer_mode_string(current), is_selected))
                 {
                     m_params.series_analyzer_mode = current;
+                }
+                ImGui::PopItemWidth();
+
+                if (int(current) >= int(SeriesAnalyzerMode::CHORDS_BEGIN))
+                {
+                    ImGui::SameLine();
+                    ImGui::SetCursorPosX(128.0f);
+                    draw_piano(current);
                 }
 
                 if (is_selected)
@@ -389,4 +389,39 @@ void NoteRender::show_controls_gui()
     }
 
     ImGui::End();
+}
+
+void NoteRender::draw_piano(SeriesAnalyzerMode mode)
+{
+    auto it = m_highlights_cache.find(mode);
+    if (it == m_highlights_cache.end())
+    {
+        std::bitset<piano_key_count> highlighted_keys;
+
+        const auto [insert_it, _] = m_highlights_cache.emplace(
+            std::piecewise_construct,
+            std::forward_as_tuple(mode),
+            std::forward_as_tuple()
+        );
+        it = insert_it;
+        auto& piano_tex = insert_it->second;
+
+        piano_tex.create(85, 14);
+        piano_tex.clear(sf::Color{0x00'00'00'00});
+
+        const int C4 = 12 * 3 + 3;
+
+        for (float halftone : get_series_analyzer_chord(mode))
+        {
+            highlighted_keys[C4 + int(halftone)] = true;
+        }
+
+        piano_tex.draw(
+            m_highlights
+            .with_octave_range(3, 5)
+            .with_highlighted_keys(std::move(highlighted_keys))
+        );
+    }
+
+    ImGui::Image(it->second, sf::Vector2f{85 * 2, 14 * 2});
 }

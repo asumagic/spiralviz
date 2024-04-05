@@ -38,6 +38,7 @@ void AudioInputGUI::show_gui()
                 ImGui::SetItemDefaultFocus();
             }
         }
+        ImGui::EndCombo();
     }
 
     ImGui::End();
